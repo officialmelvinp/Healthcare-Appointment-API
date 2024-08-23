@@ -1,0 +1,1 @@
+default_app_config = 'users.apps.UsersConfig' # from signal to app.py creating generated user profile

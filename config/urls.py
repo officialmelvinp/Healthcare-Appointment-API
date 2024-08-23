@@ -1,25 +1,57 @@
-"""
-URL configuration for config project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
+from users import routers as users_api_router
+from django.conf import settings
 
 admin.site.site_header = "hospital_api by Melvin"
 
+auth_api_url = [
+    #path('oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')),  # OAuth2 provider endpoints
+    path('', include('rest_framework_social_oauth2.urls')),  # Token authentication
+]
+
+if settings.DEBUG:
+    auth_api_url.append(path('verify/', include('rest_framework.urls')))  # Login and logout
+
+api_url_patterns = [
+    path('auth/', include(auth_api_url)),
+    path('accounts/', include(users_api_router.router.urls)),  # API account creation
+]
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("users.urls")),
+    path('api/', include(api_url_patterns)),  # Domain name for our API
 ]
+
+
+
+
+# from django.contrib import admin
+# from django.urls import path, include
+# from users import routers as users_api_router
+# from django.conf import settings
+
+# admin.site.site_header = "hospital_api by Melvin"
+
+# #auth_api_url =[] #2a
+
+# auth_api_url = [
+#     path('oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')),# OAuth2 provider endpoints
+#     path('social/', include('rest_framework_social_oauth2.urls')),# Token authentication
+# ]
+
+
+# if settings.DEBUG:#2b
+#     auth_api_url.append(path('verify/', include('rest_framework.urls')))  # Login and logout
+
+
+# api_url_patterns = [ #api url end points (1a)
+#     path('auth/', include(auth_api_url)),#2c  # API authentication for our login log out to work
+#     path('accounts/', include(users_api_router.router.urls)),  # API account creation
+    
+# ]
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('api/', include(api_url_patterns)), #1b Domain name for our api
+# ]
