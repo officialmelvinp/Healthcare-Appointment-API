@@ -47,15 +47,24 @@ class UserSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         request_method = request.method if request else None
         password = data.get('password')
+        first_name = data.get('first_name')
+        password = data.get('password')
         is_patient = data.get('is_patient', False)
         is_doctor = data.get('is_doctor', False)
+        email = data.get("email")
 
         if request_method == 'POST':
             if not password:
                 raise serializers.ValidationError({"info": "Please provide a password."})
+            if not first_name:
+                raise serializers.ValidationError({"info": "First name is required."})
+            # if not password:
+            #     raise serializers.ValidationError({"info": "Please provide a password."})
             if is_patient and is_doctor:
                 raise serializers.ValidationError("A user cannot be both a patient and a doctor.")
-
+            if User.objects.filter(email=email).exists():
+                raise serializers.ValidationError("Email already exist.")
+                
         elif request_method in ['PUT', 'PATCH']:
             old_password = data.get('old_password')
             if password and not old_password:

@@ -5,6 +5,12 @@ from rest_framework.exceptions import ValidationError
 from .serializers import UserSerializer, PatientProfileSerializer, DoctorsProfileSerializer
 from .permissions import IsUserOwnerOrGetAndPostOnly, IsDoctorOwnerOrReadOnly, IsPatientProfileOwnerOrReadOnly
 from .models import DoctorsProfile, PatientProfile
+from rest_framework.views import APIView
+# from rest_framework import permissions
+# from django.contrib.auth import authenticate
+# from rest_framework_simplejwt.tokens import AccessToken
+# from django.views.decorators.csrf import csrf_exempt
+# from django.utils.decorators import method_decorator
 
 User = get_user_model()
 
@@ -35,6 +41,28 @@ class PatientViewSet(viewsets.ModelViewSet):
     permission_classes = [IsPatientProfileOwnerOrReadOnly]
     queryset = PatientProfile.objects.all()
     serializer_class = PatientProfileSerializer
+    
+# @method_decorator(csrf_exempt, name='dispatch')
+# class UserLoginView(APIView):
+#     permission_classes = [permissions.AllowAny]
+    
+#     def post(self, request):
+#         username = request.data.get('username')
+#         password = request.data.get('password')
+#         print(username, password)
+#         user = authenticate(username=username, password=password)
+        
+        
+#         if user is not None:
+#             access_token = AccessToken.for_user(user)
+#             return Response({
+#                 'access': str(access_token),
+#             }, status=status.HTTP_200_OK)
+#         else:
+#             return Response({"error":"invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        
+
 
 
 
