@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from google.oauth2 import service_account
 from decouple import Csv, config
+import os
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,7 +47,10 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'social_django',
     'rest_framework_social_oauth2',
+    'django_filters',
     'users',
+    'Doctor',
+    'appointments',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
                 'social_django.context_processors.backends', #authentication token oauth
                 'social_django.context_processors.login_redirect',
             ],
@@ -197,3 +204,34 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+STATIC_URL = '/static/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+# MEDIA_URL = '/media/'
+
+
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_BUCKET_NAME = 'hosp_bucket'
+GS_FILE_OVERWRITE = True
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(r'C:\Users\MELVIN\Desktop\PROJECTS\HOSPITAL_APPOINTMENT\ninth-expanse-435122-d2-c33dcc81a979.json')
+
+#GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    #r'C:\Users\MELVIN\Desktop\PROJECTS\HOSPITAL_APPOINTMENT\ninth-expanse-435122-d2-c33dcc81a979.json'
+#)
+
+#C:\Users\MELVIN\Desktop\PROJECTS\HOSPITAL_APPOINTMENT\ninth-expanse-435122-d2-c33dcc81a979.json
+
+
+
+
+#emailsettings
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_PORT = 587
+EMAIL_USE_TSL = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
