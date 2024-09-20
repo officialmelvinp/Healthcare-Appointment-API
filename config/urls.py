@@ -5,14 +5,13 @@ from Doctor import routers as doctor_api_router
 from appointments import routers as appointment_api_router
 from django.conf import settings
 from django.conf.urls.static import static
-from users.views import LogoutView  # Import your custom logout view
 
 admin.site.site_header = "hospital_api by Melvin"
 
 # OAuth and authentication URLs
 auth_api_url = [
     path('', include('rest_framework_social_oauth2.urls')),  # Token authentication
-    path('logout/', LogoutView.as_view(), name='logout'),    # Custom logout endpoint
+    
 ]
 
 if settings.DEBUG:
